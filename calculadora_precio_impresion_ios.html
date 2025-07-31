@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora Precio Impresión</title>
+
+<!-- Configuración iOS para modo app -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Power Machine">
+<link rel="apple-touch-icon" href="icon_app.png">
+
+<style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+    h2 { text-align: center; color: #E5007E; }
+    .card { background: white; padding: 15px; border-radius: 8px; max-width: 400px; margin: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    label { font-weight: bold; display: block; margin-top: 10px; }
+    input { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; }
+    .result { background: #eaf1fb; padding: 10px; border-radius: 4px; margin-top: 10px; font-weight: bold; }
+    button { width: 100%; padding: 10px; background: #E5007E; color: white; border: none; border-radius: 4px; font-size: 16px; margin-top: 15px; cursor: pointer; }
+    button:hover { background: #c4006b; }
+</style>
+</head>
+<body>
+
+<h2>Calculadora Precio Impresión</h2>
+<div class="card">
+    <label>Ancho (m):</label>
+    <input type="number" id="ancho" value="1" step="0.01">
+
+    <label>Alto (m):</label>
+    <input type="number" id="alto" value="1" step="0.01">
+
+    <label>Margen (%):</label>
+    <input type="number" id="margen" value="300" step="1">
+
+    <h3>Configuración</h3>
+    <label>Precio Rollo ($):</label>
+    <input type="number" id="precioRollo" value="46410">
+
+    <label>Largo Rollo (m):</label>
+    <input type="number" id="largoRollo" value="30">
+
+    <label>Ancho Rollo (m):</label>
+    <input type="number" id="anchoRollo" value="1.07">
+
+    <label>Precio Tinta por Litro ($):</label>
+    <input type="number" id="precioTinta" value="41650">
+
+    <label>Cantidad de Colores:</label>
+    <input type="number" id="colores" value="4">
+
+    <label>Consumo Tinta (ml/m²):</label>
+    <input type="number" id="consumo" value="10">
+
+    <button onclick="calcular()">Calcular Precio</button>
+
+    <div class="result" id="resultado"></div>
+</div>
+
+<script>
+function calcular() {
+    let ancho = parseFloat(document.getElementById("ancho").value);
+    let alto = parseFloat(document.getElementById("alto").value);
+    let margen = parseFloat(document.getElementById("margen").value);
+
+    let precioRollo = parseFloat(document.getElementById("precioRollo").value);
+    let largoRollo = parseFloat(document.getElementById("largoRollo").value);
+    let anchoRollo = parseFloat(document.getElementById("anchoRollo").value);
+    let precioTinta = parseFloat(document.getElementById("precioTinta").value);
+    let colores = parseFloat(document.getElementById("colores").value);
+    let consumo = parseFloat(document.getElementById("consumo").value);
+
+    let area = ancho * alto;
+
+    let costoPapelM2 = precioRollo / (largoRollo * anchoRollo);
+    let costoTintaM2 = ((precioTinta * colores) / 1000) * consumo;
+    let costoProduccion = area * (costoPapelM2 + costoTintaM2);
+    let precioVenta = costoProduccion * (1 + (margen / 100));
+
+    document.getElementById("resultado").innerHTML = `
+        Área: ${area.toFixed(2)} m²<br>
+        Costo Producción: $${costoProduccion.toLocaleString()}<br>
+        Precio Venta: <strong>$${precioVenta.toLocaleString()}</strong>
+    `;
+}
+</script>
+
+</body>
+</html>
